@@ -22,14 +22,28 @@ npm run build
 
 # Update HTML to use minified files
 echo "🔄 Updating HTML to use minified files..."
-# Use double quotes for sed pattern to allow proper handling of special characters
-sed -i.bak "s/<!-- <link rel=\"stylesheet\" href=\"style.min.css\"> -->/<link rel=\"stylesheet\" href=\"style.min.css\">/" index.html
-sed -i.bak "s/<link rel=\"stylesheet\" href=\"style.css\">/<!-- <link rel=\"stylesheet\" href=\"style.css\"> -->/" index.html
-sed -i.bak "s/<!-- <script src=\"script.min.js\"><\/script> -->/<script src=\"script.min.js\"><\/script>/" index.html
-sed -i.bak "s/<script src=\"script.js\">/<!-- <script src=\"script.js\"> -->/" index.html
+# Create a new index.html with the correct file references
+cat index.html | 
+  awk '{
+    if ($0 ~ /<!-- <link rel="stylesheet" href="style.min.css">/) {
+      print "<link rel=\"stylesheet\" href=\"style.min.css\">"
+    } 
+    else if ($0 ~ /<link rel="stylesheet" href="style.css">/) {
+      print "<!-- <link rel=\"stylesheet\" href=\"style.css\"> -->"
+    }
+    else if ($0 ~ /<!-- <script src="script.min.js">/) {
+      print "<script src=\"script.min.js\"></script>"
+    }
+    else if ($0 ~ /<script src="script.js">/) {
+      print "<!-- <script src=\"script.js\"> -->"
+    }
+    else {
+      print $0
+    }
+  }' > index.html.new
 
-# Remove backup files
-rm index.html.bak
+# Replace the original file with the new one
+mv index.html.new index.html
 
 # Update production mode flag in server.js
 echo "🔒 Setting production mode flags..."
