@@ -1,0 +1,38 @@
+{
+  "name": "lucky-spin-wheel",
+  "version": "1.0.0",
+  "description": "An Eid-themed Lucky Spin Wheel game with SQLite database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run minify-js && npm run minify-css",
+    "minify-js": "uglifyjs script.js -o script.min.js -c -m",
+    "minify-css": "cleancss -o style.min.css style.css",
+    "deploy": "npm run build && node server.js",
+    "prod": "pm2 start ecosystem.config.js --env production",
+    "reload": "pm2 reload lucky-spin-wheel",
+    "stop": "pm2 stop lucky-spin-wheel",
+    "monit": "pm2 monit",
+    "logs": "pm2 logs lucky-spin-wheel",
+    "status": "pm2 status"
+  },
+  "keywords": [
+    "spin-wheel",
+    "game",
+    "eid",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "clean-css-cli": "^5.6.2",
+    "uglify-js": "^3.17.4"
+  }
+}
