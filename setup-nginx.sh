@@ -25,7 +25,7 @@ echo "Creating Nginx configuration..."
 cat > /etc/nginx/sites-available/lucky-wheel <<EOF
 server {
     listen 80;
-    server_name \${DOMAIN_NAME} www.\${DOMAIN_NAME};
+    server_name ${DOMAIN_NAME} www.${DOMAIN_NAME};
 
     access_log /var/log/nginx/lucky-wheel-access.log;
     error_log /var/log/nginx/lucky-wheel-error.log;
