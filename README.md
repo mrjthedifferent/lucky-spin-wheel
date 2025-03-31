@@ -183,3 +183,53 @@ To switch back to development mode:
 ./dev.sh
 npm run dev
 ```
+
+# Troubleshooting
+
+## SQLite3 Module Error
+
+If you encounter the following error when running the application:
+
+```
+Error: [...]/node_modules/sqlite3/build/Release/node_sqlite3.node: invalid ELF header
+```
+
+This error occurs when the SQLite3 native module was compiled for a different architecture or operating system than the one you're running on. This commonly happens when:
+
+- Moving code between different operating systems (e.g., from macOS to Linux)
+- Deploying to a production environment with a different architecture
+- Using Docker or virtual environments
+
+### Solution:
+
+Rebuild the SQLite3 module for your current environment:
+
+```bash
+npm rebuild sqlite3
+```
+
+If that doesn't resolve the issue, try completely reinstalling the node modules:
+
+```bash
+rm -rf node_modules
+npm install
+```
+
+For persistent issues, you may need to explicitly install SQLite3 with the correct build flags:
+
+```bash
+npm install sqlite3 --build-from-source
+```
+
+### Production Deployment Note
+
+When deploying to production servers, always rebuild native modules to ensure compatibility with the server environment:
+
+```bash
+# After deploying code to your server
+npm rebuild
+# Then start the application
+npm start
+# Or with PM2
+npm run prod
+```

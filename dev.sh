@@ -17,10 +17,11 @@ fi
 
 # Update HTML to use non-minified files
 echo "🔄 Updating HTML to use non-minified files..."
-sed -i.bak 's/<link rel="stylesheet" href="style.min.css">/<!-- <link rel="stylesheet" href="style.min.css"> -->/' index.html
-sed -i.bak 's/<!-- <link rel="stylesheet" href="style.css"> -->/<link rel="stylesheet" href="style.css">/' index.html
-sed -i.bak 's/<script src="script.min.js"><\/script>/<!-- <script src="script.min.js"><\/script> -->/' index.html
-sed -i.bak 's/<!-- <script src="script.js"> -->/<script src="script.js">/' index.html
+# Use double quotes for sed pattern to allow proper handling of special characters
+sed -i.bak "s/<link rel=\"stylesheet\" href=\"style.min.css\">/<!-- <link rel=\"stylesheet\" href=\"style.min.css\"> -->/" index.html
+sed -i.bak "s/<!-- <link rel=\"stylesheet\" href=\"style.css\"> -->/<link rel=\"stylesheet\" href=\"style.css\">/" index.html
+sed -i.bak "s/<script src=\"script.min.js\"><\/script>/<!-- <script src=\"script.min.js\"><\/script> -->/" index.html
+sed -i.bak "s/<!-- <script src=\"script.js\"> -->/<script src=\"script.js\">/" index.html
 
 # Remove backup files
 rm index.html.bak

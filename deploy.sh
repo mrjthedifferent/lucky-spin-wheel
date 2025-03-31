@@ -12,16 +12,21 @@ fi
 echo "📦 Installing dependencies..."
 npm install
 
+# Rebuild SQLite3 for the current environment to prevent ELF header issues
+echo "🔄 Rebuilding SQLite3 for this environment..."
+npm rebuild sqlite3
+
 # Build minified assets
 echo "🔧 Building minified assets..."
 npm run build
 
 # Update HTML to use minified files
 echo "🔄 Updating HTML to use minified files..."
-sed -i.bak 's/<!-- <link rel="stylesheet" href="style.min.css"> -->/<link rel="stylesheet" href="style.min.css">/' index.html
-sed -i.bak 's/<link rel="stylesheet" href="style.css">/<!-- <link rel="stylesheet" href="style.css"> -->/' index.html
-sed -i.bak 's/<!-- <script src="script.min.js"><\/script> -->/<script src="script.min.js"><\/script>/' index.html
-sed -i.bak 's/<script src="script.js">/<!-- <script src="script.js"> -->/' index.html
+# Use double quotes for sed pattern to allow proper handling of special characters
+sed -i.bak "s/<!-- <link rel=\"stylesheet\" href=\"style.min.css\"> -->/<link rel=\"stylesheet\" href=\"style.min.css\">/" index.html
+sed -i.bak "s/<link rel=\"stylesheet\" href=\"style.css\">/<!-- <link rel=\"stylesheet\" href=\"style.css\"> -->/" index.html
+sed -i.bak "s/<!-- <script src=\"script.min.js\"><\/script> -->/<script src=\"script.min.js\"><\/script>/" index.html
+sed -i.bak "s/<script src=\"script.js\">/<!-- <script src=\"script.js\"> -->/" index.html
 
 # Remove backup files
 rm index.html.bak
