@@ -233,3 +233,64 @@ npm start
 # Or with PM2
 npm run prod
 ```
+
+# Nginx Setup for Production
+
+For production deployment, it's recommended to use Nginx as a reverse proxy in front of the Node.js application. This provides several benefits:
+
+- Improved performance for static file serving
+- SSL/TLS termination
+- Load balancing capabilities
+- Security layer
+
+## Quick Setup
+
+A setup script is included to automate the Nginx configuration process:
+
+```bash
+# Run as root or with sudo
+sudo ./setup-nginx.sh
+```
+
+This script will:
+1. Install Nginx if not already installed
+2. Create and enable a site configuration for your domain
+3. Set up proper proxy settings to forward requests to your application
+4. Configure performance optimizations like gzip compression and caching
+5. Optionally set up SSL with Let's Encrypt
+
+## Manual Configuration
+
+If you prefer to set up Nginx manually, use the provided configuration template:
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;  # Replace with your domain
+
+    access_log /var/log/nginx/lucky-wheel-access.log;
+    error_log /var/log/nginx/lucky-wheel-error.log;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Additional optimizations are included in the full configuration
+}
+```
+
+Save this to `/etc/nginx/sites-available/lucky-wheel` and create a symbolic link to enable it:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/lucky-wheel /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
