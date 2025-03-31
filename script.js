@@ -670,7 +670,85 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Spin the wheel and calculate the result
     async function spinWheel() {
-        if (isSpinning || !currentUser) return;
+        if (isSpinning) return;
+
+        // Check if there are any players
+        if (!currentUser) {
+            // Show a message that the user needs to join the game first
+            setValidationMessage('Please join the game with your info first!', 'error');
+
+            // Create a more visible notification near the spin button
+            const wheelContainer = document.querySelector('.wheel-container');
+
+            // Remove any existing notification
+            const existingNotification = document.getElementById('spin-notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // Create and add new notification
+            const notification = document.createElement('div');
+            notification.id = 'spin-notification';
+            notification.className = 'spin-notification';
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Player Required</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="notification-body">
+                    Please join the game with your information first!
+                </div>
+                <div class="notification-footer">
+                    <button class="notification-btn">Join Game</button>
+                </div>
+            `;
+            wheelContainer.appendChild(notification);
+
+            // Add event listeners to the notification
+            const closeBtn = notification.querySelector('.notification-close');
+            closeBtn.addEventListener('click', function () {
+                notification.classList.add('disappear');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            });
+
+            const joinBtn = notification.querySelector('.notification-btn');
+            joinBtn.addEventListener('click', function () {
+                // Focus on the name input field
+                playerNameInput.focus();
+                // Remove the notification
+                notification.classList.add('disappear');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            });
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('disappear');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+
+            return;
+        }
+
+        // Remove any existing notification
+        const existingNotification = document.getElementById('spin-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
 
         // Try to play the spin sound
         playSound(spinSound);

@@ -559,6 +559,25 @@ input[type="text"]:disabled {
 
 .validation-message.error {
     color: #ff4d4d;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
 }
 
 .validation-message.success {
@@ -1460,5 +1479,130 @@ body::-webkit-scrollbar {
 
     100% {
         transform: translateY(-3px);
+    }
+}
+
+.spin-notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(16, 23, 41, 0.95);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 77, 77, 0.3);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    z-index: 100;
+    animation: popup-appear 0.3s forwards;
+    font-weight: bold;
+    width: 280px;
+    overflow: hidden;
+}
+
+.notification-header {
+    background: rgba(255, 77, 77, 0.2);
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 77, 77, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-header i {
+    color: #ff4d4d;
+    margin-right: 8px;
+    font-size: 1.1rem;
+}
+
+.notification-header span {
+    flex-grow: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.notification-close {
+    background: transparent;
+    color: #aaa;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: none;
+}
+
+.notification-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: none;
+    box-shadow: none;
+}
+
+.notification-body {
+    padding: 15px;
+    text-align: center;
+    line-height: 1.5;
+    font-weight: normal;
+}
+
+.notification-footer {
+    padding: 10px 15px 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.notification-btn {
+    background: linear-gradient(45deg, var(--neon-blue), #0088a3);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+}
+
+.notification-btn:hover {
+    background: linear-gradient(45deg, #0088a3, var(--neon-blue));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 217, 255, 0.5);
+}
+
+.spin-notification:not(.disappear) {
+    animation: popup-appear 0.3s forwards;
+}
+
+.spin-notification.disappear {
+    animation: popup-disappear 0.3s forwards;
+}
+
+@keyframes popup-appear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes popup-disappear {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
     }
 }
